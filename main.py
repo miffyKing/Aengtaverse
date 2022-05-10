@@ -1,5 +1,6 @@
 import random
 
+
 # 동물 리스트 혹은 디
 
 # 빈칸 or 동물 객체
@@ -149,6 +150,7 @@ class Lion(Animals):
         self.y = self.y + y
         self.energy_left -= self.calorie_waste_rate
 
+
     def eat_food(self, x, y):  # (x, y)의 있는 먹이를 먹어서 본인의 칼로리를 올리고, 해당 Grid의 원소를 0으로 바꾼다.
         self.energy_left += Grid[x][y].calorie
         Grid[x][y] = 0
@@ -180,6 +182,7 @@ class Lion(Animals):
                     else:  # 포식자도 감지 못 하고, 먹이 못 찾은 경우 random하게 이동
                         self.move(self.x + random.randint(-1, 1), self.y + random.randint(-1, 1))
 
+<<<<<<< HEAD
     def make_child(self):
         # 일정 칼로리이상이면 번식한다.
         # 움직이고나서 실행된다
@@ -209,5 +212,24 @@ class Lion(Animals):
         if self.energy_left >= self.max_calorie * self.threshold_birth :
             if self.birth_rate < random.random():
                 self.make_child()
+=======
+class Lion (Animals):   #이렇게 상속하는게 맞노
+    def __init__(self, x, y, energy_left, time_left, calorie, site, birth_rate, hunting_rate, predator, food, calorie_waste_rate):
+        self.x = 0
+        self.y = 0
+        self.energy_left = 100
+        self.time_left = 50
+        self.calorie = 100
+        self.size = 3
+        self.birth_rate = 30
+        self.hunting_rate = 70
+        self.predator = [""]
+        self.food = ["byounghwa", "hwanju"]
+        self.calorie_waste_rate = 10
+
+
+
+
+>>>>>>> df0dcc42f762f1ff6ec3518176dfbc4b1988c7f0
 
 
