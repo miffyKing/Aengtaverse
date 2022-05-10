@@ -199,7 +199,7 @@ class Lion(Animals):
         Lion_list.append(new_lion)
         new_lion.flag_newborn = True
         Grid[self.x + child_x][self.y + child_y] = new_lion
-        self.energy_left /= 2<<<<<< HEAD
+        self.energy_left /= 2
     def make_child(self):
         # 일정 칼로리이상이면 번식한다.
         # 움직이고나서 실행된다
