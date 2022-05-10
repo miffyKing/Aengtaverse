@@ -1,5 +1,6 @@
 import random
 
+
 # 동물 리스트 혹은 디
 
 # 빈칸 or 동물 객체
