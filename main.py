@@ -25,7 +25,7 @@ class Animals:
     site = 0  # 동물의 시야 범위
     birth_rate = 0  # 동물의 번식율 (%)
     hunting_rate = 0  # 동물의 사냥 성공 확률 (%)
-    predator = []  # class의 객체의 포식자 name 담고 있을 list
+    predator = ["Lion"]  # class의 객체의 포식자 name 담고 있을 list
     food = []  # class의 먹이 name를 담고 있을 list
     calorie_waste_rate = 0  # 동물의 tick 당 칼로리 소모량
 
@@ -52,19 +52,35 @@ class Animals:
             # 1-1. 난 죽었다 저 친구나 올라줘라
             for temp in self.predator:
                 if Grid[self.x+x][self.y+y].name == temp:
-                    Lion_list.remove(self)
+                    Grid[self.x+x][self.y+y].energy_left += self.calorie #내가 잡아먹히고 그리드에 있던 동물 에너지 증가
+                    Lion_list.remove(self)  #자기 자신 삭제
+                    break
 
             # 1. 내가 이동하려는 칸에 이미 먹이가 존재하는 경우 생각
             # 1-1. 먹고 그 자리를 차지한다.
             for temp in self.food:
                 if Grid[self.x+x][self.y+y].name == temp:
                     # Grid 상에서 temp 삭제는 쉬움, 허나, temp_list에서 temp를 삭제하기가 어렵다
-                    (Animal[temp]).remove(Grid[self.x+x][self.y+y])
+                    self.energy_left += Grid[self.x+x][self.y+y].calorie    #원래 grid에 있던 애의 calorie 만큼 섭취
+                    (Animal[temp]).remove(Grid[self.x+x][self.y+y]) #원래 그리드에 있던 거 리스트에서 제거
+                    break
+            # 3. 내가 이동하려는 칸에 관련 없는 동물이 존재하는 경우
+            #1. 누가 이미 존재하는 경우 ->다른데로 가야지
+
+            #가고자 하는 grid에 생명체 있을 경우 해당 grid에서 site 범위 만큼을 탐색해서 이동할 수 있는 그리드로 이동한다.
+            #1. 포식자 피해 도망가다 그리드에 다른 생명체 있어서 다시 포식자 쪽으로 가게되는 경우가 생긴다.
+            #2. 새로 다시 이동하게 된 grid에 포식자가 있을 경우를 고려 못한다.
+            #3. 먼저 이동하려는 그리드를 검사를 하기 위하여 1번 위(if 바로 아래) 로 올린다.
+
+            #2. 최대 바운더리를 벗어나는 경우 -> 그냥 거기서 멈출지
+                #2. 잘 모르겠는 새끼가 있는 경우
+                #3. 이동했더니 전체 그리드 범위 밖에 나간 경우
+                    #1) 바운더리 넘어가면 그 반대쪽으로 튀어나오게 하는 방법
 
 
 
 
-        # 3. 내가 이동하려는 칸에 관련 없는 동물이 존재하는 경우
+
         
         # move에서 가려는 칸에 먹이가 있으면 사냥하는거까지 해야함
         Grid[self.x][self.y] = 0
@@ -81,13 +97,14 @@ class Animals:
 
     def check_site(self):  # 틱에서 결국 실행되는 함수
         # 포식자 검색 & 먹이 검색
+        #temp 로 표시 된 것 string으로 바꼈으니까 . grid[][]로 바꿔야함
         for i in range(-1 * self.site, self.site):
             for j in range(-1 * self.site, self.site):
                 if i == 0 and j == 0: continue
                 if Grid[self.x + i][self.y + j] != 0:
                     for temp in self.predator:  # 포식자 검색
-                        if Grid[self.x + i][self.y + j] == temp:
-                            if temp.hunting_rate > random.random():  # 사냥 실패
+                        if Grid[self.x + i][self.y + j].name == temp:
+                            if Grid[self.x + i][self.y + j].hunting_rate > random.random():  # 포식자 감지 실패
                                 self.move(-i, -j)
                                 return
 
@@ -95,7 +112,7 @@ class Animals:
                     min_dirx = 0
                     min_diry = 0
                     for temp in self.food:  # 먹이 list 순회
-                        if Grid[self.x + i][self.y + j] == temp:  # 해당 칸에 먹이 존재시
+                        if Grid[self.x + i][self.y + j].name == temp:  # 해당 칸에 먹이 존재시
                             if max(abs(i), abs(j)) < min_distance:  # 최소 거리 먹이 검사
                                 min_distance = max(abs(i), abs(j))
                                 min_dirx = i;
@@ -162,8 +179,8 @@ class Lion(Animals):
                 if i == 0 and j == 0: continue
                 if Grid[self.x + i][self.y + j] != 0:
                     for temp in self.predator:  # 포식자 검색
-                        if Grid[self.x + i][self.y + j] == temp:
-                            if temp.hunting_rate > random.random():  # 사냥 실패
+                        if Grid[self.x + i][self.y + j].name == temp:
+                            if Grid[self.x + i][self.y + j].hunting_rate > random.random():  # 사냥 실패
                                 self.move(-i, -j)
                                 return
 
