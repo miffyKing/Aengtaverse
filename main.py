@@ -13,15 +13,16 @@ Food_list = []
 
 Animal = {"Lion" : Lion_list, "Food" : Food_list}
 
-Site_list = [[0] for i in range(0, 5)]          #이동 순회 할 좌표들이 i의 크기에 따라 8방, 16방, 32.. 모두 리스트에 저장됨
-def func(k):
-    for i in range(-k, k + 1):
-        for j in range(-k, k + 1):
+Site_list_random = [ [0]  for i in range(0, 5)]
+Site_list_ordered = [ [0]  for i in range(0, 5)]
+
+def make_Site_list_random(k):
+    for i in range(-k, k+1):
+        for j in range(-k, k+1):
             tmp = [i, j]
-            if i ** 2 + j ** 2 >= k ** 2:
-                Site_list[k].append(tmp)
-    Site_list[k].remove(0)
-# 여기서 리스트의 사이즈 중 하나를 랜덤으로 골라 거기서부터 리스트를 시작하면 그 지점에서부터 site 탐색을 시작한다.
+            if i**2 + j**2 >= k**2 :
+                Site_list_random[k].append(tmp)
+    Site_list_random[k].remove(0)
 
 def make_Site_list_ordered(k):
     for i in range(0, k+1):
@@ -30,7 +31,10 @@ def make_Site_list_ordered(k):
             if(i**2 + j**2 >= k**2):
                 Site_list_ordered[k].append(tmp)
     Site_list_ordered[k].remove(0)
-#위의 함수랑 유사한데 이건 사냥, 먹이 , 회피 시 사분면중 이동하고자 하는 사분면에 대해서만 시작함. -> 4분면은 저 0, k+1 를 변경해주면 한 사분면만 순회함.
+
+for i in range(1, 5):
+    make_Site_list_random(i)
+    make_Site_list_ordered(i)
 
 class Animals:
 
