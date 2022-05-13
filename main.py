@@ -13,7 +13,24 @@ Food_list = []
 
 Animal = {"Lion" : Lion_list, "Food" : Food_list}
 
+Site_list = [[0] for i in range(0, 5)]          #이동 순회 할 좌표들이 i의 크기에 따라 8방, 16방, 32.. 모두 리스트에 저장됨
+def func(k):
+    for i in range(-k, k + 1):
+        for j in range(-k, k + 1):
+            tmp = [i, j]
+            if i ** 2 + j ** 2 >= k ** 2:
+                Site_list[k].append(tmp)
+    Site_list[k].remove(0)
+# 여기서 리스트의 사이즈 중 하나를 랜덤으로 골라 거기서부터 리스트를 시작하면 그 지점에서부터 site 탐색을 시작한다.
 
+def make_Site_list_ordered(k):
+    for i in range(0, k+1):
+        for j in range(0, k+1):
+            tmp = [i, j]
+            if(i**2 + j**2 >= k**2):
+                Site_list_ordered[k].append(tmp)
+    Site_list_ordered[k].remove(0)
+#위의 함수랑 유사한데 이건 사냥, 먹이 , 회피 시 사분면중 이동하고자 하는 사분면에 대해서만 시작함. -> 4분면은 저 0, k+1 를 변경해주면 한 사분면만 순회함.
 
 class Animals:
 
@@ -55,15 +72,7 @@ class Animals:
         elif move_flag == 3:
 
         elif move_flag == 4:
-            Site_list = [[0] for i in range(0, 5)]          #이동 순회 할 좌표들이 i의 크기에 따라 8방, 16방, 32.. 모두 리스트에 저장됨
-            def func(k):
-                for i in range(-k, k + 1):
-                    for j in range(-k, k + 1):
-                        tmp = [i, j]
-                        if i ** 2 + j ** 2 >= k ** 2:
-                            Site_list[k].append(tmp)
-                Site_list[k].remove(0)
-                #여기서 리스트의 사이즈 중 하나를 랜덤으로 골라 거기서부터 리스트를 시작하면 그 지점에서부터 site 탐색을 시작한다.
+
 
         # 0. 최대 바운더리도 생각해야한다.
 
@@ -114,30 +123,89 @@ class Animals:
 
     def check_site(self):  # 틱에서 결국 실행되는 함수
         # 포식자 검색 & 먹이 검색
-        #temp 로 표시 된 것 string으로 바꼈으니까 . grid[][]로 바꿔야함
-        for i in range(-1 * self.site, self.site):
-            for j in range(-1 * self.site, self.site):
-                if i == 0 and j == 0: continue
-                if Grid[self.x + i][self.y + j] != 0:
+        # temp 로 표시 된 것 string으로 바꼈으니까 . grid[][]로 바꿔야함
+
+        # 포식자 검색도 일단 가까이부터 하도록 변경
+        for i in range(1, self.site + 1):
+            k = random.randint(0, len(Site_list_random[i]) - 1)
+            for j in range(0, len(Site_list_random[i])):
+                next_x = self.x + Site_list_random[i][k - j][0]
+                next_y = self.y + Site_list_random[i][k - j][1]
+                if (next_x >= Grid_size):
+                    next_x -= Grid_size
+                if (next_y >= Grid_size):
+                    next_y -= Grid_size
+
+                if Grid[next_x][next_y] != 0:
                     for temp in self.predator:  # 포식자 검색
-                        if Grid[self.x + i][self.y + j].name == temp:
-                            if Grid[self.x + i][self.y + j].hunting_rate > random.random():  # 포식자 감지 성공
-                                self.move(-i, -j, 2)        #포식자 이동 2
+                        if Grid[next_x][next_y].name == temp:
+                            if Grid[next_x][next_y].hunting_rate > random.random():  # 포식자 감지 성공
+                                # next_x, y가 포식자의 위치
+                                # self.move(self.x - next_x, self.y - next_y, 2)
+                                # 검사할 사분면의 결정
+                                if (self.x - next_x < 0):
+                                    x_sign = -1
+                                else:
+                                    x_sign = 1
+                                if (self.y - next_y < 0):  #
+                                    y_sign = -1
+                                else:
+                                    y_sign = 1
+
+                                for a in range(1, self.site / 2 + 1):
+                                    t = random.randint(0, len(Site_list_ordered) - 1)
+                                    for b in range(0, len(Site_list_ordered[a])):
+                                        # 비어있음을 검사
+                                        temp_x = self.x + x_sign * Site_list_ordered[i][k - j][0]
+                                        temp_y = self.y + y_sign * Site_list_ordered[i][k - j][1]
+                                        if (Grid[temp_x][temp_y] == 0):
+                                            self.move(temp_x - self.x, temp_y - self.y, 2)
+                                            return
+                                # 포식자 검사에는 성공했지만, 도망가는 방향에 빈자리가 하나도 없어서 제자리에 정지
+                                self.move(0, 0, 4)
+                                return
+
+        for i in range(1, self.site + 1):
+            k = random.randint(0, len(Site_list_random[i]) - 1)
+            for j in range(0, len(Site_list_random[i])):
+                next_x = self.x + Site_list_random[i][k - j][0]
+                next_y = self.y + Site_list_random[i][k - j][1]
+                if (next_x >= Grid_size):
+                    next_x -= Grid_size
+                if (next_y >= Grid_size):
+                    next_y -= Grid_size
 
                     min_distance = self.site + 1  # 먹이 탐색 최소 거리의 초기값 설정
                     min_dirx = 0
                     min_diry = 0
                     for temp in self.food:  # 먹이 list 순회
-                        if Grid[self.x + i][self.y + j].name == temp:  # 해당 칸에 먹이 존재시
+                        if Grid[next_x][next_y].name == temp:  # 해당 칸에 먹이 존재시
                             if max(abs(i), abs(j)) < min_distance:  # 최소 거리 먹이 검사
                                 min_distance = max(abs(i), abs(j))
-                                min_dirx = i;
-                                min_diry = j
+                                min_dirx = next_x
+                                min_diry = next_y
                     if min_distance != self.site + 1:  # 발견한 경우, eat하고 move한다
-                        self.eat_food(self.x + min_dirx, self.y + min_diry)
-                        self.move(self.x + min_dirx, self.y + min_diry, 3)                                  #먹이찾는 move 3
-                    else:  # 포식자도 감지 못 하고, 먹이 못 찾은 경우 random하게 이동
-                        self.move(self.x + random.randint(-1, 1), self.y + random.randint(-1, 1), 4)        #랜덤이동은 4
+                        self.eat_food(next_x, next_y)
+                        self.move(self.x + min_dirx, self.y + min_diry, 3)
+                        return
+
+        # 포식자도 없고, 먹이 못 찾았을 경우
+        for i in range(1, self.site + 1):
+            k = random.randint(0, len(Site_list_random[i]) - 1)
+            for j in range(0, len(Site_list_random[i])):
+                next_x = self.x + Site_list_random[i][k - j][0]
+                next_y = self.y + Site_list_random[i][k - j][1]
+                if (next_x >= Grid_size):
+                    next_x -= Grid_size
+                if (next_y >= Grid_size):
+                    next_y -= Grid_size
+                if (Grid[next_x][next_y] == 0):
+                    self.move(next_x - self.x, next_y - self.y, 4)
+                    return
+
+        # 만약 이동하려햇는데 주변이 다 차있는 경우에는 제자리 이동
+        self.move(0, 0, 4)
+
 
     def make_child(self):
         # 일정 칼로리이상이면 번식한다.
