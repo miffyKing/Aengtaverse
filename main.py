@@ -28,7 +28,6 @@ class Animals:
     predator = ["Lion"]  # class의 객체의 포식자 name 담고 있을 list
     food = []  # class의 먹이 name를 담고 있을 list
     calorie_waste_rate = 0  # 동물의 tick 당 칼로리 소모량
-
     max_life = 0
     min_life = 0
 
@@ -45,8 +44,29 @@ class Animals:
         self.y = y
 
     def move(self, x, y, move_flag):  # 동물의 이동 함수 (사실상 뭐 인자로 업데이트만 하는거)
+        #1번 - 개체 생성(번식) 후 새끼 배치
+        #2번 - 포식자를 찾았을 시 도망
+        #3번 - 먹이를 찾았을 때 먹이 추적
+        #4번 - 아무 경우도 아니고 그냥 랜덤 이동
+        if move_flag == 1:
+
+        elif move_flag == 2:
+
+        elif move_flag == 3:
+
+        elif move_flag == 4:
+            Site_list = [[0] for i in range(0, 5)]          #이동 순회 할 좌표들이 i의 크기에 따라 8방, 16방, 32.. 모두 리스트에 저장됨
+            def func(k):
+                for i in range(-k, k + 1):
+                    for j in range(-k, k + 1):
+                        tmp = [i, j]
+                        if i ** 2 + j ** 2 >= k ** 2:
+                            Site_list[k].append(tmp)
+                Site_list[k].remove(0)
+                #여기서 리스트의 사이즈 중 하나를 랜덤으로 골라 거기서부터 리스트를 시작하면 그 지점에서부터 site 탐색을 시작한다.
 
         # 0. 최대 바운더리도 생각해야한다.
+
         if Grid[self.x+x][self.y+y] != 0:
             # 1. 내가 이동하려는 칸에 이미 포식자가 존재하는 경우
             # 1-1. 난 죽었다 저 친구나 올라줘라
@@ -77,9 +97,9 @@ class Animals:
                 #3. 이동했더니 전체 그리드 범위 밖에 나간 경우
                     #1) 바운더리 넘어가면 그 반대쪽으로 튀어나오게 하는 방법
 
-
-
         # move에서 가려는 칸에 먹이가 있으면 사냥하는거까지 해야함
+
+        #이 부분은 이동후 공통 -> 원래 좌표 지우고, 새좌표로 이동하고, 이동 칼로리 감소
         Grid[self.x][self.y] = 0
         self.x = self.x + x
         self.y = self.y + y
@@ -103,7 +123,6 @@ class Animals:
                         if Grid[self.x + i][self.y + j].name == temp:
                             if Grid[self.x + i][self.y + j].hunting_rate > random.random():  # 포식자 감지 성공
                                 self.move(-i, -j, 2)        #포식자 이동 2
-                                return
 
                     min_distance = self.site + 1  # 먹이 탐색 최소 거리의 초기값 설정
                     min_dirx = 0
