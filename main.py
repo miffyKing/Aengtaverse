@@ -44,7 +44,7 @@ class Animals:
         self.x = x
         self.y = y
 
-    def move(self, x, y):  # 동물의 이동 함수 (사실상 뭐 인자로 업데이트만 하는거)
+    def move(self, x, y, move_flag):  # 동물의 이동 함수 (사실상 뭐 인자로 업데이트만 하는거)
 
         # 0. 최대 바운더리도 생각해야한다.
         if Grid[self.x+x][self.y+y] != 0:
@@ -79,9 +79,6 @@ class Animals:
 
 
 
-
-
-        
         # move에서 가려는 칸에 먹이가 있으면 사냥하는거까지 해야함
         Grid[self.x][self.y] = 0
         self.x = self.x + x
@@ -104,8 +101,8 @@ class Animals:
                 if Grid[self.x + i][self.y + j] != 0:
                     for temp in self.predator:  # 포식자 검색
                         if Grid[self.x + i][self.y + j].name == temp:
-                            if Grid[self.x + i][self.y + j].hunting_rate > random.random():  # 포식자 감지 실패
-                                self.move(-i, -j)
+                            if Grid[self.x + i][self.y + j].hunting_rate > random.random():  # 포식자 감지 성공
+                                self.move(-i, -j, 2)        #포식자 이동 2
                                 return
 
                     min_distance = self.site + 1  # 먹이 탐색 최소 거리의 초기값 설정
@@ -119,9 +116,9 @@ class Animals:
                                 min_diry = j
                     if min_distance != self.site + 1:  # 발견한 경우, eat하고 move한다
                         self.eat_food(self.x + min_dirx, self.y + min_diry)
-                        self.move(self.x + min_dirx, self.y + min_diry)
+                        self.move(self.x + min_dirx, self.y + min_diry, 3)                                  #먹이찾는 move 3
                     else:  # 포식자도 감지 못 하고, 먹이 못 찾은 경우 random하게 이동
-                        self.move(self.x + random.randint(-1, 1), self.y + random.randint(-1, 1))
+                        self.move(self.x + random.randint(-1, 1), self.y + random.randint(-1, 1), 4)        #랜덤이동은 4
 
     def make_child(self):
         # 일정 칼로리이상이면 번식한다.
@@ -158,7 +155,7 @@ class Lion(Animals):
         self.x = x
         self.y = y
 
-    def move(self, x, y):  # 동물의 이동 함수 (사실상 뭐 인자로 업데이트만 하는거)
+    def move(self, x, y, move_flag):  # 동물의 이동 함수 (사실상 뭐 인자로 업데이트만 하는거)
         # 최대 바운더리도 생각해야한다.
         # 내가 이동하려는 칸에 이미 동물이 존재하는 경우 생각
         # move에서 가려는 칸에 먹이가 있으면 사냥하는거까지 해야함
@@ -181,7 +178,7 @@ class Lion(Animals):
                     for temp in self.predator:  # 포식자 검색
                         if Grid[self.x + i][self.y + j].name == temp:
                             if Grid[self.x + i][self.y + j].hunting_rate > random.random():  # 사냥 실패
-                                self.move(-i, -j)
+                                self.move(-i, -j, 2)        #포식자 인식, 도망 flag 2
                                 return
 
                     min_distance = self.site + 1  # 먹이 탐색 최소 거리의 초기값 설정
@@ -195,28 +192,11 @@ class Lion(Animals):
                                 min_diry = j
                     if min_distance != self.site + 1:  # 발견한 경우, eat하고 move한다
                         self.eat_food(self.x + min_dirx, self.y + min_diry)
-                        self.move(self.x + min_dirx, self.y + min_diry)
+                        self.move(self.x + min_dirx, self.y + min_diry, 3)      #먹이 추적, 3
                     else:  # 포식자도 감지 못 하고, 먹이 못 찾은 경우 random하게 이동
-                        self.move(self.x + random.randint(-1, 1), self.y + random.randint(-1, 1))
+                        self.move(self.x + random.randint(-1, 1), self.y + random.randint(-1, 1), 4)   #그냥 랜덤, 4
 
-    def make_child(self):
-        # 일정 칼로리이상이면 번식한다.
-        # 움직이고나서 실행된다
-        
-        # 새로 태어날 동물의 좌표 시야내에 랜덤하게 생성
-        child_x = random.randint(-self.site, self.site)
-        child_y = random.randint(-self.site, self.site)
-        if child_x == 0 and child_y == 0:
-            child_x = 1
-            
-        # 새로운 동물 생성
-        # 충돌 검사 필요
-        new_lion = Lion(self.x + child_x, self.y + child_y, self.energy_left / 2)
-        new_lion.move(new_lion.x, new_lion.y)
-        Lion_list.append(new_lion)
-        new_lion.flag_newborn = True
-        Grid[self.x + child_x][self.y + child_y] = new_lion
-        self.energy_left /= 2
+
     def make_child(self):
         # 일정 칼로리이상이면 번식한다.
         # 움직이고나서 실행된다
@@ -230,7 +210,7 @@ class Lion(Animals):
         # 새로운 동물 생성
         # 충돌 검사 필요
         new_lion = Lion(self.x + child_x, self.y + child_y, self.energy_left / 2)
-        new_lion.move(new_lion.x, new_lion.y)
+        new_lion.move(new_lion.x, new_lion.y, 1)       #새로 새끼 생성
         Lion_list.append(new_lion)
         new_lion.flag_newborn = True
         Grid[self.x + child_x][self.y + child_y] = new_lion
@@ -250,14 +230,3 @@ class Lion(Animals):
 
 
         # Problem 1 : 새로 태어난 동물은 턴을 실행하지 않는다.
-
-    def use_turn(self): # 결국 매 틱 실행되는 함수
-        if self.flag_newborn: 
-            return
-        self.check_site() 
-
-        if self.energy_left >= self.max_calorie * self.threshold_birth :
-            if self.birth_rate < random.random():
-                self.make_child()
-
-
