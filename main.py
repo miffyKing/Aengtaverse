@@ -61,59 +61,20 @@ class Animals:
         self.y = y
 
     def move(self, x, y, move_flag):  # 동물의 이동 함수 (사실상 뭐 인자로 업데이트만 하는거)
-        #1번 - 개체 생성(번식) 후 새끼 배치
-        #2번 - 포식자를 찾았을 시 도망
-        #3번 - 먹이를 찾았을 때 먹이 추적
-        #4번 - 아무 경우도 아니고 그냥 랜덤 이동
-        if move_flag == 1:
-
-        elif move_flag == 2:
-
-        elif move_flag == 3:
-
-        elif move_flag == 4:
-
-
-        # 0. 최대 바운더리도 생각해야한다.
-
-        if Grid[self.x+x][self.y+y] != 0:
-            # 1. 내가 이동하려는 칸에 이미 포식자가 존재하는 경우
-            # 1-1. 난 죽었다 저 친구나 올라줘라
-            for temp in self.predator:
-                if Grid[self.x+x][self.y+y].name == temp:
-                    Grid[self.x+x][self.y+y].energy_left += self.calorie #내가 잡아먹히고 그리드에 있던 동물 에너지 증가
-                    Lion_list.remove(self)  #자기 자신 삭제
-                    break
-
-            # 1. 내가 이동하려는 칸에 이미 먹이가 존재하는 경우 생각
-            # 1-1. 먹고 그 자리를 차지한다.
-            for temp in self.food:
-                if Grid[self.x+x][self.y+y].name == temp:
-                    # Grid 상에서 temp 삭제는 쉬움, 허나, temp_list에서 temp를 삭제하기가 어렵다
-                    self.energy_left += Grid[self.x+x][self.y+y].calorie    #원래 grid에 있던 애의 calorie 만큼 섭취
-                    (Animal[temp]).remove(Grid[self.x+x][self.y+y]) #원래 그리드에 있던 거 리스트에서 제거
-                    break
-            # 3. 내가 이동하려는 칸에 관련 없는 동물이 존재하는 경우
-            #1. 누가 이미 존재하는 경우 ->다른데로 가야지
-
-            #가고자 하는 grid에 생명체 있을 경우 해당 grid에서 site 범위 만큼을 탐색해서 이동할 수 있는 그리드로 이동한다.
-            #1. 포식자 피해 도망가다 그리드에 다른 생명체 있어서 다시 포식자 쪽으로 가게되는 경우가 생긴다.
-            #2. 새로 다시 이동하게 된 grid에 포식자가 있을 경우를 고려 못한다.
-            #3. 먼저 이동하려는 그리드를 검사를 하기 위하여 1번 위(if 바로 아래) 로 올린다.
-
-            #2. 최대 바운더리를 벗어나는 경우 -> 그냥 거기서 멈출지
-                #2. 잘 모르겠는 새끼가 있는 경우
-                #3. 이동했더니 전체 그리드 범위 밖에 나간 경우
-                    #1) 바운더리 넘어가면 그 반대쪽으로 튀어나오게 하는 방법
-
-        # move에서 가려는 칸에 먹이가 있으면 사냥하는거까지 해야함
 
         #이 부분은 이동후 공통 -> 원래 좌표 지우고, 새좌표로 이동하고, 이동 칼로리 감소
         Grid[self.x][self.y] = 0
         self.x = self.x + x
         self.y = self.y + y
         Grid[self.x][self.y] = self
-        self.energy_left -= self.calorie_waste_rate
+        self.energy_left -= self.calorie_waste_rate #이동하느라 에너지 소모
+        self.time_left -= 1 # 수명 깍임
+        if self.time_left <= 0: #  수명 다 살았다면
+            #여기서 죽는거 구현, 애니멀 리스트에서 빼주고, 좌표 0으로 바꿔주기git add 
+        if self.x < 0:
+            self.x += Grid_size
+        if self.y < 0:
+            self.y += Grid_size
 
     def eat_food(self, x, y):
         # (x, y)의 있는 먹이를 먹어서 본인의 칼로리를 올리고, 해당 Grid의 원소를 0으로 바꾼다.
