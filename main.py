@@ -207,17 +207,24 @@ class Animals:
         self.move(0, 0, 4)
 
 
-    def make_child(self):
+    def make_child(self, Lists):
         # 일정 칼로리이상이면 번식한다.
         # 움직이고나서 실행된다
-        child_x = random.randint(-self.site, self.site)
-        child_y = random.randint(-self.site, self.site)
-        if child_x == 0 and child_y == 0:
-            child_x = 1
-        # 새로운 동물 생성
-        a = Animals()
-        Lion_list.append(a, self.x + child_x, self.y + child_y, self.energy_left / 2)
-        self.energy_left /= 2
+
+        for i in range(1, self.site+1):
+            k = random.randint(0, len(Site_list_random[i]) -1)
+            for j in range(0, len(Site_list_random[i])):
+                child_x = self.x+Site_list_random[i][k - j][0]
+                child_y = self.y+Site_list_random[i][k - j][1]
+                if(child_x>= Grid_size) :
+                    child_x -= Grid_size
+                if (child_y >= Grid_size):
+                    child_y -= Grid_size
+
+                if(Grid[child_x][child_y]==0):
+                    a = Animals(child_x, child_y, self.energy_left / 2)
+                    Lists.append(a)
+                    self.energy_left /= 2
 
 
 class Lion(Animals):
