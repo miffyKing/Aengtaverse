@@ -156,8 +156,8 @@ class Animals:
                                     t = random.randint(0, len(Site_list_ordered) - 1)
                                     for b in range(0, len(Site_list_ordered[a])):
                                         # 비어있음을 검사
-                                        temp_x = self.x + x_sign * Site_list_ordered[i][k - j][0]
-                                        temp_y = self.y + y_sign * Site_list_ordered[i][k - j][1]
+                                        temp_x = self.x + x_sign * Site_list_ordered[i][t - j][0]
+                                        temp_y = self.y + y_sign * Site_list_ordered[i][t - j][1]
                                         if (Grid[temp_x][temp_y] == 0):
                                             self.move(temp_x - self.x, temp_y - self.y, 2)
                                             return
