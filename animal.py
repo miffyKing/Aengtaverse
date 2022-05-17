@@ -25,6 +25,11 @@ Site_list_ordered = [ [0]  for i in range(0, 7)] # 부호마다 사분면을 검
 
 # 위의 리스트의 값을 초기화
 def make_Site_list_random(k):
+
+    if k==0:
+        Site_list_random[0] = [[0, 0]]
+        return
+
     for i in range(-k, k+1):
         for j in range(-k, k+1):
             tmp = [i, j]
@@ -33,6 +38,11 @@ def make_Site_list_random(k):
     Site_list_random[k].remove(0)
 
 def make_Site_list_ordered(k):
+
+    if k==0:
+        Site_list_random[0] = [[0, 0]]
+        return
+
     for i in range(0, k+1):
         for j in range(0, k+1):
             tmp = [i, j]
@@ -99,7 +109,7 @@ class Animals:
         # temp 로 표시 된 것 string으로 바꼈으니까 . grid[][]로 바꿔야함
 
         # 포식자 검색도 일단 가까이부터 하도록 변경
-        for i in range(1, self.site + 1):
+        for i in range(0, self.site + 1):
             k = random.randint(0, len(Site_list_random[i]) - 1)
             for j in range(0, len(Site_list_random[i])):
                 next_x = self.x + Site_list_random[i][k - j][0]
@@ -151,22 +161,22 @@ class Animals:
                 if (next_y >= Grid_size):
                     next_y -= Grid_size
 
-                    min_distance = self.site + 1  # 먹이 탐색 최소 거리의 초기값 설정
-                    min_dirx = 0
-                    min_diry = 0
+                min_distance = self.site + 1  # 먹이 탐색 최소 거리의 초기값 설정
+                min_dirx = 0
+                min_diry = 0
 
-                    for temp in self.food:  # 먹이 list 순회
-                        if Grid[next_x][next_y] != 0 and Grid[next_x][next_y].name == temp:  # 해당 칸에 먹이 존재시
-                            if max(abs(i), abs(j)) < min_distance:  # 최소 거리 먹이 검사
-                                min_distance = max(abs(i), abs(j))
-                                min_dirx = next_x
-                                min_diry = next_y
-                                what_to_eat = temp
-                    if min_distance != self.site + 1:  # 발견한 경우, eat하고 move한다
-                        Animal[what_to_eat].remove(Grid[next_x][next_y])
-                        self.eat_food(next_x, next_y)
-                        self.move(min_dirx - self.x, min_diry - self.y)
-                        return
+                for temp in self.food:  # 먹이 list 순회
+                    if Grid[next_x][next_y] != 0 and Grid[next_x][next_y].name == temp:  # 해당 칸에 먹이 존재시
+                        if max(abs(i), abs(j)) < min_distance:  # 최소 거리 먹이 검사
+                            min_distance = max(abs(i), abs(j))
+                            min_dirx = next_x
+                            min_diry = next_y
+                            what_to_eat = temp
+                if min_distance != self.site + 1:  # 발견한 경우, eat하고 move한다
+                    Animal[what_to_eat].remove(Grid[next_x][next_y])
+                    self.eat_food(next_x, next_y)
+                    self.move(min_dirx - self.x, min_diry - self.y)
+                    return
 
         # 포식자도 없고, 먹이 못 찾았을 경우
         for i in range(1, self.site + 1):

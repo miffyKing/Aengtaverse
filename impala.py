@@ -1,11 +1,12 @@
 import random
 from animal import Animals, Grid_size, Grid_Grass, Grid, Animal, Site_list_random, Site_list_ordered
-class Impala(Animals):
 
+
+class Impala(Animals):
     max_life = 600
     min_life = 400
     site = 6
-    birth_rate = 1
+    birth_rate = 0.3
     hunting_rate = 1
     predator = ["Lion"]
     food = ["Grass"]
@@ -44,6 +45,8 @@ class Impala(Animals):
         # (x, y)의 있는 먹이를 먹어서 본인의 칼로리를 올리고, 해당 Grid의 원소를 0으로 바꾼다.
         # self.cnt += 1
         self.energy_left += Grid_Grass[x][y].calorie
+        if(self.energy_left > self.max_calorie) :
+            self.energy_left = self.max_calorie
         Grid_Grass[x][y] = 0
 
     def check_site(self):  # 틱에서 결국 실행되는 함수
@@ -77,13 +80,13 @@ class Impala(Animals):
                                 else:
                                     y_sign = 1
 
-                                for a in range(1, int(self.site/2) + 1):
+                                for a in range(1, int(self.site / 2) + 1):
                                     t = random.randint(0, len(Site_list_ordered[a]) - 1)
                                     for b in range(0, len(Site_list_ordered[a])):
                                         # 비어있음을 검사
                                         temp_x = self.x + x_sign * Site_list_ordered[a][t - b][0]
                                         temp_y = self.y + y_sign * Site_list_ordered[a][t - b][1]
-                                        if(temp_x >= Grid_size or temp_y >= Grid_size):
+                                        if (temp_x >= Grid_size or temp_y >= Grid_size):
                                             temp_x = temp_x % Grid_size
                                             temp_y = temp_y % Grid_size
                                         if (Grid[temp_x][temp_y] == 0):
@@ -93,7 +96,7 @@ class Impala(Animals):
                                 self.move(0, 0)
                                 return
 
-        for i in range(1, self.site + 1):
+        for i in range(0, self.site + 1):
             k = random.randint(0, len(Site_list_random[i]) - 1)
             for j in range(0, len(Site_list_random[i])):
                 next_x = self.x + Site_list_random[i][k - j][0]
@@ -103,22 +106,24 @@ class Impala(Animals):
                 if (next_y >= Grid_size):
                     next_y -= Grid_size
 
-                    min_distance = self.site + 1  # 먹이 탐색 최소 거리의 초기값 설정
-                    min_dirx = 0
-                    min_diry = 0
+                min_distance = self.site + 1  # 먹이 탐색 최소 거리의 초기값 설정
+                min_dirx = 0
+                min_diry = 0
 
-                    for temp in self.food:  # 먹이 list 순회
-                        if Grid_Grass[next_x][next_y] != 0 and Grid_Grass[next_x][next_y].name == temp:  # 해당 칸에 먹이 존재시
-                            if max(abs(i), abs(j)) < min_distance and Grid[next_x][next_y] == 0:  # 최소 거리 먹이 검사
+                for temp in self.food:  # 먹이 list 순회
+                    if Grid_Grass[next_x][next_y] != 0 and Grid_Grass[next_x][next_y].name == temp:  # 해당 칸에 먹이 존재시
+                        if Grid[next_x][next_y] == 0 or (next_x == self.x and next_y == self.y):
+                            if max(abs(i), abs(j)) < min_distance: # 최소 거리 먹이 검사
                                 min_distance = max(abs(i), abs(j))
                                 min_dirx = next_x
                                 min_diry = next_y
                                 what_to_eat = temp
-                    if min_distance != self.site + 1:  # 발견한 경우, eat하고 move한다
-                        Animal[what_to_eat].remove(Grid_Grass[next_x][next_y])
-                        self.eat_food(next_x, next_y)
-                        self.move(min_dirx - self.x, min_diry - self.y)
-                        return
+                if min_distance != self.site + 1:  # 발견한 경우, eat하고 move한다
+                    Animal[what_to_eat].remove(Grid_Grass[next_x][next_y])
+                    self.eat_food(next_x, next_y)
+                    # print("Removed Grid Grass")
+                    self.move(min_dirx - self.x, min_diry - self.y)
+                    return
 
         # 포식자도 없고, 먹이 못 찾았을 경우
         for i in range(1, self.site + 1):
@@ -138,9 +143,9 @@ class Impala(Animals):
         self.move(0, 0)
 
 
-    def use_turn(self): # 결국 매 틱 실행되는 함수
-        self.check_site()
-        if self.energy_left >= self.max_calorie * self.threshold_birth :
+    def use_turn(self):  # 결국 매 틱 실행되는 함수
+        if self.energy_left >= self.max_calorie * self.threshold_birth:
             if (1 - self.birth_rate) < random.random():
-               self.make_child()
+                self.make_child()
+        self.check_site()
 

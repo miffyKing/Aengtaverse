@@ -35,7 +35,8 @@ def init_background():
     for i in Animal_lists:
         i.clear()
 
-    for i in range(1, 7):
+
+    for i in range(0, 7):
         make_Site_list_random(i)
         make_Site_list_ordered(i)
 
@@ -98,7 +99,6 @@ def simulate(lists):
         for i in range(0, length-1):
             list_of_animal = Animal_lists[i]
             tmp = len(list_of_animal)
-            print(tmp, end =" ")
             j = 0
             while j < len(list_of_animal):
                 list_of_animal[j].use_turn()
@@ -108,11 +108,13 @@ def simulate(lists):
                     j -= 1
                 if (tmp == 0):
                     break
+            print(len(list_of_animal), end=" ")
+
         # make grass
         gen_grass(length -1, 1)
         print(len(Animal_lists[length-1]), end=" ")
 
         print()
 
-input = [0, 399, 0, 0, 100]
+input = [0, 10, 0, 0, 350]
 simulate(input)
