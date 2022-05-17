@@ -1,8 +1,8 @@
 import random
 
-Grid_size = 100
+Grid_size = 20
 Grid = [[0] * Grid_size for i in range(Grid_size)]
-
+Grid_Grass = [[0] * Grid_size for i in range(Grid_size)]
 # 종의 Object들이 들어갈 리스트
 Lion_list = []
 Impala_list = []
@@ -20,8 +20,8 @@ Animal_lists = [Lion_list, Impala_list, Baboon_list, Rhino_list, Grass_list]
 
 # 시야 내의 검색을 위한 list 2개
 # 내 주위를 랜덤하게 검색
-Site_list_random = [ [0]  for i in range(0, 5)] # 최대 5까지 했는데, 동물들의 site를 구해서 다시 최대값을 바꿀 필요가 있을수도
-Site_list_ordered = [ [0]  for i in range(0, 5)] # 부호마다 사분면을 검색하기 위해 사용되는 리스트
+Site_list_random = [ [0]  for i in range(0, 7)] # 최대 5까지 했는데, 동물들의 site를 구해서 다시 최대값을 바꿀 필요가 있을수도
+Site_list_ordered = [ [0]  for i in range(0, 7)] # 부호마다 사분면을 검색하기 위해 사용되는 리스트
 
 # 위의 리스트의 값을 초기화
 def make_Site_list_random(k):
@@ -40,7 +40,7 @@ def make_Site_list_ordered(k):
                 Site_list_ordered[k].append(tmp)
     Site_list_ordered[k].remove(0)
 
-for i in range(1, 5):
+for i in range(1, 7):
     make_Site_list_random(i)
     make_Site_list_ordered(i)
 
@@ -61,6 +61,8 @@ class Animals:
     max_life = 0
     min_life = 0
     max_calorie = 0
+    threshold_birth = 0.7
+    cnt = 0
 
     name = "Animals"
 
@@ -91,6 +93,7 @@ class Animals:
 
     def eat_food(self, x, y):
         # (x, y)의 있는 먹이를 먹어서 본인의 칼로리를 올리고, 해당 Grid의 원소를 0으로 바꾼다.
+        self.cnt += 1
         self.energy_left += Grid[x][y].calorie
         Grid[x][y] = 0
         # 해당 리스트 역시 순회해서
@@ -155,13 +158,16 @@ class Animals:
                     min_distance = self.site + 1  # 먹이 탐색 최소 거리의 초기값 설정
                     min_dirx = 0
                     min_diry = 0
+
                     for temp in self.food:  # 먹이 list 순회
                         if Grid[next_x][next_y] != 0 and Grid[next_x][next_y].name == temp:  # 해당 칸에 먹이 존재시
                             if max(abs(i), abs(j)) < min_distance:  # 최소 거리 먹이 검사
                                 min_distance = max(abs(i), abs(j))
                                 min_dirx = next_x
                                 min_diry = next_y
+                                what_to_eat = temp
                     if min_distance != self.site + 1:  # 발견한 경우, eat하고 move한다
+                        Animal[what_to_eat].remove(Grid[next_x][next_y])
                         self.eat_food(next_x, next_y)
                         self.move(min_dirx - self.x, min_diry - self.y)
                         return

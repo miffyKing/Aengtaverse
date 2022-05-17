@@ -4,16 +4,16 @@ from lion import Lion
 
 class Baboon(Animals):
 
-    max_life = 100
-    min_life = 50
-    site = 4
-    birth_rate = 0
-    hunting_rate = 0.7
+    max_life = 200
+    min_life = 150
+    site = 5
+    birth_rate = 0.3
+    hunting_rate = 1
     predator = []
-    food = ["Grasshopper"]
-    calorie_waste_rate = 10
-    max_calorie = 200
-    threshold_birth = 0.7
+    food = ["Grasshopper", "Grass"]
+    calorie_waste_rate = 4
+    max_calorie = 600
+    calorie = 400
 
     name = "Baboon"
 

@@ -2,7 +2,7 @@ import random
 from lion import Lion
 from impala import Impala
 from baboon import Baboon
-from animal import Grid, Grid_size, Animal_lists
+from animal import Grid, Grid_size, Animal_lists, Grid_Grass
 from rhino import Rhino
 from grass import Grass
 
@@ -30,6 +30,7 @@ def init_background():
     for i in range(0, Grid_size):
         for j in range(0, Grid_size):
             Grid[i][j] = 0
+            Grid_Grass[i][j] = 0
 
     for i in Animal_lists:
         i.clear()
@@ -63,17 +64,17 @@ def simulate(lists):
     init_background()
     gen_animals(lists)
     cnt = 0
-
-    while(cnt < 10000):
+    length = len(lists)
+    while(cnt < 1000):
         #print_Grid(cnt)
-        #print(cnt)
+        print(cnt, end=" ")
         cnt+=1
         # Problem is removing lion during the iteration
 
-        for i in range(0, len(lists)):
+        for i in range(0, length-1):
             list_of_animal = Animal_lists[i]
             tmp = len(list_of_animal)
-            #print(tmp, end =" ")
+            print(tmp, end =" ")
             j = 0
             while j < len(list_of_animal):
                 list_of_animal[j].use_turn()
@@ -83,7 +84,11 @@ def simulate(lists):
                     j -= 1
                 if (tmp == 0):
                     break
-    #print()
+        # make grass
+        gen_species(length -1, 2)
+        print(len(Animal_lists[length-1]), end=" ")
 
-input = [10, 20, 20, 20, 100]
+        print()
+
+input = [0, 100, 0, 0, 150]
 simulate(input)

@@ -3,16 +3,17 @@ from animal import Animals,  Grid_size, Grid, Animal, Site_list_random
 
 class Rhino(Animals):
 
-    max_life = 100
-    min_life = 50
-    site = 4
-    birth_rate = 0
-    hunting_rate = 0.7
+    max_life = 300
+    min_life = 200
+    site = 5
+    birth_rate = 0.3
+    hunting_rate = 1
     predator = ["Lion"]
     food = ["Grass"]
-    calorie_waste_rate = 10
-    max_calorie = 200
+    calorie_waste_rate = 6
+    max_calorie = 1500
     threshold_birth = 0.7
+    calorie = 700
 
     name = "Rhino"
 

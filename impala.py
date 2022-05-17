@@ -4,17 +4,16 @@ from lion import Lion
 
 class Impala(Animals):
 
-    max_life = 100
-    min_life = 50
-    site = 4
-    birth_rate = 0.3
+    max_life = 200
+    min_life = 150
+    site = 6
+    birth_rate = 0.4
     hunting_rate = 1
     predator = ["Lion"]
     food = ["Grass"]
-    calorie = 500
-    calorie_waste_rate = 5
-    max_calorie = 400
-    threshold_birth = 0.7
+    calorie = 400
+    calorie_waste_rate = 1
+    max_calorie = 2000
 
     name = "Impala"
 
@@ -44,23 +43,7 @@ class Impala(Animals):
 
     def use_turn(self): # 결국 매 틱 실행되는 함수
         self.check_site()
-        #if self.energy_left >= self.max_calorie * self.threshold_birth :
-            #if 1 - self.birth_rate < random.random():
-            #    self.make_child()
+        if self.energy_left >= self.max_calorie * self.threshold_birth :
+            if 1 - self.birth_rate < random.random():
+               self.make_child()
 
-def Impala_Gen(num):
-    Grid_tmp = []
-    for i in range(0, Grid_size):
-        for j in range(0, Grid_size):
-            tmp = [i, j]
-            if Grid[i][j] == 0:
-                Grid_tmp.append(tmp)
-
-    for i in range(0, num):
-        rand = random.randint(0, len(Grid_tmp) - 1)
-        x = Grid_tmp[rand][0]
-        y = Grid_tmp[rand][1]
-        a = Impala(x, y, 200)
-        Impala_list.append(a)
-        Grid[x][y] = a
-        del Grid_tmp[rand]

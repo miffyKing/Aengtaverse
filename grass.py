@@ -1,6 +1,8 @@
 import random
 from animal import Animals, Grid_size, Grid, Animal, Site_list_random
 
+
+
 class Grass(Animals):
 
     max_life = 100
