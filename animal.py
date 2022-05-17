@@ -1,22 +1,29 @@
 import random
 
-
-# 동물 리스트 혹은 디
-
-# 빈칸 or 동물 객체
-Grid_size = 10
+Grid_size = 100
 Grid = [[0] * Grid_size for i in range(Grid_size)]
 
-# 동물 종 마다 list가 필요하다고 생각하는데
+# 종의 Object들이 들어갈 리스트
 Lion_list = []
-Food_list = []
 Impala_list = []
+Baboon_list = []
+Rhino_list = []
+Grass_list = []
 
-Animal = {"Lion" : Lion_list, "Food" : Food_list, "Impala" : Impala_list}
+# 이름을 통해 리스트에 접근할 수 있도록 해주는 딕셔너리, 새로운 종의 추가마다 추가 필요
+Animal = {"Lion" : Lion_list, "Impala" : Impala_list, "Baboon" : Baboon_list,
+          "Rhino" : Rhino_list, "Grass" : Grass_list}
+# 종의 이름들을 담고 있는 리스트
+Animal_Name = ["Lion", "Impala", "Baboon", "Rhino", "Grass"]
+# 종들의 리스트들을 모아놓은 리스트
+Animal_lists = [Lion_list, Impala_list, Baboon_list, Rhino_list, Grass_list]
 
-Site_list_random = [ [0]  for i in range(0, 5)]
-Site_list_ordered = [ [0]  for i in range(0, 5)]
+# 시야 내의 검색을 위한 list 2개
+# 내 주위를 랜덤하게 검색
+Site_list_random = [ [0]  for i in range(0, 5)] # 최대 5까지 했는데, 동물들의 site를 구해서 다시 최대값을 바꿀 필요가 있을수도
+Site_list_ordered = [ [0]  for i in range(0, 5)] # 부호마다 사분면을 검색하기 위해 사용되는 리스트
 
+# 위의 리스트의 값을 초기화
 def make_Site_list_random(k):
     for i in range(-k, k+1):
         for j in range(-k, k+1):
@@ -37,6 +44,7 @@ for i in range(1, 5):
     make_Site_list_random(i)
     make_Site_list_ordered(i)
 
+
 class Animals:
 
     x = 0  # 동물의 X좌표
@@ -52,10 +60,7 @@ class Animals:
     calorie_waste_rate = 0  # 동물의 tick 당 칼로리 소모량
     max_life = 0
     min_life = 0
-
     max_calorie = 0
-    threshold_birth = 0
-    flag_newborn = False
 
     name = "Animals"
 
@@ -65,14 +70,13 @@ class Animals:
         self.x = x
         self.y = y
 
-    def move(self, x, y):  # 동물의 이동 함수 (사실상 뭐 인자로 업데이트만 하는거)
+    def move(self, x, y):  # 동물의 이동 함수 (self.x + x, self.y+y) 로 이동
 
-        #이 부분은 이동후 공통 -> 원래 좌표 지우고, 새좌표로 이동하고, 이동 칼로리 감소
-        Grid[self.x][self.y] = 0
-        self.x = self.x + x
-        self.y = self.y + y
-        Grid[self.x][self.y] = self
-        self.energy_left -= self.calorie_waste_rate #이동하느라 에너지 소모
+        Grid[self.x][self.y] = 0 # 이동 전의 위치 비우기
+        self.x = self.x + x  # x 좌표 이동
+        self.y = self.y + y  # y 좌표 이동
+        Grid[self.x][self.y] = self # 이동
+        self.energy_left -= self.calorie_waste_rate  #이동하느라 에너지 소모
         self.time_left -= 1 # 수명 깍임
 
         if self.time_left <= 0 or self.energy_left <= 0: #  수명 다 살았다면
@@ -197,170 +201,3 @@ class Animals:
                     a = Animals(child_x, child_y, self.energy_left / 2)
                     self.energy_left /= 2
                     return
-
-class Lion(Animals):
-
-    max_life = 100
-    min_life = 50
-    site = 4
-    birth_rate = 0
-    hunting_rate = 0.7
-    predator = []
-    food = ["Impala", "Rhino"]
-    calorie_waste_rate = 10
-    max_calorie = 200
-    threshold_birth = 0.7
-
-    name = "Lion"
-
-    def __init__(self, x, y, energy_left):
-        self.time_left = random.randint(self.min_life, self.max_life)
-        self.energy_left = energy_left
-        self.x = x
-        self.y = y
-
-    def make_child(self):
-        # 일정 칼로리이상이면 번식한다.
-        # 움직이고나서 실행된다
-        for i in range(1, self.site + 1):
-            k = random.randint(0, len(Site_list_random[i]) - 1)
-            for j in range(0, len(Site_list_random[i])):
-                child_x = self.x + Site_list_random[i][k - j][0]
-                child_y = self.y + Site_list_random[i][k - j][1]
-                if (child_x >= Grid_size):
-                    child_x -= Grid_size
-                if (child_y >= Grid_size):
-                    child_y -= Grid_size
-                if (Grid[child_x][child_y] == 0):
-                    a = Lion(child_x, child_y, self.energy_left / 2)
-                    Animal[self.name].append(a)
-                    self.energy_left /= 2
-                    return
-
-    def use_turn(self): # 결국 매 틱 실행되는 함수
-        self.check_site()
-        #if self.energy_left >= self.max_calorie * self.threshold_birth :
-            #if 1 - self.birth_rate < random.random():
-            #    self.make_child()
-
-class Impala(Animals):
-
-    max_life = 100
-    min_life = 50
-    site = 4
-    birth_rate = 0.3
-    hunting_rate = 1
-    predator = ["Lion"]
-    food = ["Grass"]
-    calorie = 500
-    calorie_waste_rate = 5
-    max_calorie = 400
-    threshold_birth = 0.7
-
-    name = "Impala"
-
-    def __init__(self, x, y, energy_left):
-        self.time_left = random.randint(self.min_life, self.max_life)
-        self.energy_left = energy_left
-        self.x = x
-        self.y = y
-
-    def make_child(self):
-        # 일정 칼로리이상이면 번식한다.
-        # 움직이고나서 실행된다
-        for i in range(1, self.site + 1):
-            k = random.randint(0, len(Site_list_random[i]) - 1)
-            for j in range(0, len(Site_list_random[i])):
-                child_x = self.x + Site_list_random[i][k - j][0]
-                child_y = self.y + Site_list_random[i][k - j][1]
-                if (child_x >= Grid_size):
-                    child_x -= Grid_size
-                if (child_y >= Grid_size):
-                    child_y -= Grid_size
-                if (Grid[child_x][child_y] == 0):
-                    a = Lion(child_x, child_y, self.energy_left / 2)
-                    Animal[self.name].append(a)
-                    self.energy_left /= 2
-                    return
-
-    def use_turn(self): # 결국 매 틱 실행되는 함수
-        self.check_site()
-        #if self.energy_left >= self.max_calorie * self.threshold_birth :
-            #if 1 - self.birth_rate < random.random():
-            #    self.make_child()
-
-
-def Lion_Gen(num):
-    Grid_tmp = []
-    for i in range(0, Grid_size):
-        for j in range(0, Grid_size):
-            tmp = [i, j]
-            Grid_tmp.append(tmp)
-
-    for i in range(0, num):
-        rand = random.randint(0, len(Grid_tmp) - 1)
-        x = Grid_tmp[rand][0]
-        y = Grid_tmp[rand][1]
-        a = Lion(x, y, 200)
-        Lion_list.append(a)
-        Grid[x][y] = a
-        del Grid_tmp[rand]
-
-def Impala_Gen(num):
-    Grid_tmp = []
-    for i in range(0, Grid_size):
-        for j in range(0, Grid_size):
-            tmp = [i, j]
-            Grid_tmp.append(tmp)
-
-    for i in range(0, num):
-        rand = random.randint(0, len(Grid_tmp) - 1)
-        x = Grid_tmp[rand][0]
-        y = Grid_tmp[rand][1]
-        a = Impala(x, y, 200)
-        Impala_list.append(a)
-        Grid[x][y] = a
-        del Grid_tmp[rand]
-
-cnt = 0
-def print_Grid(cnt):
-    print("Printing Grid ", cnt)
-    for i in range(0, Grid_size):
-        for j in range(0, Grid_size):
-            if(Grid[i][j] == 0) :
-                print(0, end=' ')
-            elif Grid[i][j].name == "Lion":
-                print(1, end=' ')
-            elif Grid[i][j].name == "Impala":
-                print(2, end=' ')
-        print()
-    print()
-
-Lion_Gen(20)
-Impala_Gen(20)
-
-while(len(Lion_list) > 0 or len(Impala_list) > 0):
-    print_Grid(cnt)
-    cnt+=1
-    # Problem is removing lion during the iteration
-    tmp = len(Lion_list)
-    i = 0
-    while i < len(Lion_list):
-        Lion_list[i].use_turn()
-        i+=1
-        if tmp != len(Lion_list):
-            tmp = len(Lion_list)
-            i -= 1
-        if (tmp == 0):
-            break
-
-    tmp = len(Impala_list)
-    i = 0
-    while i < len(Impala_list):
-        Impala_list[i].use_turn()
-        i += 1
-        if tmp != len(Impala_list):
-            tmp = len(Impala_list)
-            i -= 1
-        if (tmp == 0):
-            break
