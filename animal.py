@@ -40,10 +40,6 @@ def make_Site_list_ordered(k):
                 Site_list_ordered[k].append(tmp)
     Site_list_ordered[k].remove(0)
 
-for i in range(1, 7):
-    make_Site_list_random(i)
-    make_Site_list_ordered(i)
-
 
 class Animals:
 
@@ -145,7 +141,7 @@ class Animals:
                                 self.move(0, 0)
                                 return
 
-        for i in range(1, self.site + 1):
+        for i in range(0, self.site + 1):
             k = random.randint(0, len(Site_list_random[i]) - 1)
             for j in range(0, len(Site_list_random[i])):
                 next_x = self.x + Site_list_random[i][k - j][0]

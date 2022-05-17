@@ -12,9 +12,9 @@ class Grass(Animals):
     hunting_rate = 0.0
     predator = ["Impala", "rhino"]
     food = []
-    calorie = 100
+    calorie = 1000
     calorie_waste_rate = 4
-    max_calorie = 100
+    max_calorie = 1000
     threshold_birth = 0.7
 
     name = "Grass"
