@@ -14,7 +14,7 @@ class Skunk(Animals):
     food = ["Grasshopper", "Mouse"]
     calorie_waste_rate = 4
     max_calorie = 600
-    calorie = 400요
+    calorie = 400
 
     name = "Skunk"
 
