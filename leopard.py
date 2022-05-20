@@ -1,22 +1,19 @@
 import random
-from animal import Animals,  Grid_size, Grid, Animal, Site_list_random
-from lion import Lion
-from leopard import Leopard
+from animal import Animals, Grid_size, Grid, Animal, Site_list_random
 
-class Baboon(Animals):
+class Leopard(Animals):
 
-    max_life = 200
+    max_life = 250
     min_life = 150
-    site = 5
-    birth_rate = 0.3
-    hunting_rate = 1
-    predator = ["Leopard"]
-    food = ["Mouse"]
-    calorie_waste_rate = 4
-    max_calorie = 600
-    calorie = 400
+    site = 3
+    birth_rate = 0.1
+    hunting_rate = 0.7
+    predator = []
+    food = ["Impala", "Baboon", "Skunk"]
+    calorie_waste_rate = 10
+    max_calorie = 200
 
-    name = "Baboon"
+    name = "Leopard"
 
     def __init__(self, x, y, energy_left):
         self.time_left = random.randint(self.min_life, self.max_life)
@@ -37,13 +34,13 @@ class Baboon(Animals):
                 if (child_y >= Grid_size):
                     child_y -= Grid_size
                 if (Grid[child_x][child_y] == 0):
-                    a = Baboon(child_x, child_y, self.energy_left / 2)
+                    a = Lion(child_x, child_y, self.energy_left / 2)
                     Animal[self.name].append(a)
                     self.energy_left /= 2
                     return
 
     def use_turn(self): # 결국 매 틱 실행되는 함수
         self.check_site()
-        #if self.energy_left >= self.max_calorie * self.threshold_birth :
-            #if 1 - self.birth_rate < random.random():
-            #    self.make_child()
+        if self.energy_left >= self.max_calorie * self.threshold_birth :
+            if 1 - self.birth_rate < random.random():
+               self.make_child()

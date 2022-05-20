@@ -9,7 +9,7 @@ class Lion(Animals):
     birth_rate = 0.1
     hunting_rate = 0.7
     predator = []
-    food = ["Impala", "Rhino", "Baboon"]
+    food = ["Impala", "Rhino"]
     calorie_waste_rate = 10
     max_calorie = 200
 

@@ -9,14 +9,23 @@ Impala_list = []
 Baboon_list = []
 Rhino_list = []
 Grass_list = []
+Leopard_list = []
+Mouse_list = []
+Grasshopper_list = []
+Skunk_list = []
 
 # 이름을 통해 리스트에 접근할 수 있도록 해주는 딕셔너리, 새로운 종의 추가마다 추가 필요
 Animal = {"Lion" : Lion_list, "Impala" : Impala_list, "Baboon" : Baboon_list,
-          "Rhino" : Rhino_list, "Grass" : Grass_list}
+          "Rhino" : Rhino_list, "Grass" : Grass_list, "Leopard" : Leopard_list,
+          "Mouse" : Mouse_list, "Grasshopper": Grasshopper_list, "Skunk": Skunk_list}
 # 종의 이름들을 담고 있는 리스트
-Animal_Name = ["Lion", "Impala", "Baboon", "Rhino", "Grass"]
+Animal_Name = ["Lion", "Impala", "Baboon", "Rhino",
+               "Grass", "Leopard", "Mouse", "Grasshopper",
+               "Skunk"]
 # 종들의 리스트들을 모아놓은 리스트
-Animal_lists = [Lion_list, Impala_list, Baboon_list, Rhino_list, Grass_list]
+Animal_lists = [Lion_list, Impala_list, Baboon_list,
+                Rhino_list, Grass_list, Leopard_list,
+                Mouse_list, Grasshopper_list, Skunk_list]
 
 # 시야 내의 검색을 위한 list 2개
 # 내 주위를 랜덤하게 검색

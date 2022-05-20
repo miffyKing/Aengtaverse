@@ -3,7 +3,7 @@ from animal import Animals,  Grid_size, Grid, Animal, Site_list_random
 from lion import Lion
 from leopard import Leopard
 
-class Baboon(Animals):
+class Skunk(Animals):
 
     max_life = 200
     min_life = 150
@@ -11,12 +11,12 @@ class Baboon(Animals):
     birth_rate = 0.3
     hunting_rate = 1
     predator = ["Leopard"]
-    food = ["Mouse"]
+    food = ["Grasshopper", "Mouse"]
     calorie_waste_rate = 4
     max_calorie = 600
-    calorie = 400
+    calorie = 400요
 
-    name = "Baboon"
+    name = "Skunk"
 
     def __init__(self, x, y, energy_left):
         self.time_left = random.randint(self.min_life, self.max_life)

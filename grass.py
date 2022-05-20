@@ -10,7 +10,7 @@ class Grass(Animals):
     site = 0
     birth_rate = 0.2
     hunting_rate = 0.0
-    predator = ["Impala", "rhino"]
+    predator = ["Impala", "Rhino", "Grasshopper", "Mouse"]
     food = []
     calorie = 1000
     calorie_waste_rate = 4

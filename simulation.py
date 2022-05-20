@@ -5,6 +5,10 @@ from baboon import Baboon
 from animal import Grid, Grid_size, Animal_lists, Grid_Grass, make_Site_list_random, make_Site_list_ordered
 from rhino import Rhino
 from grass import Grass
+from leopard import Leopard
+from mouse import Mouse
+from grasshopper import Grasshopper
+from skunk import Skunk
 
 cnt = 0
 def print_Grid(cnt):
@@ -21,10 +25,19 @@ def print_Grid(cnt):
                 print(3, end=' ')
             elif Grid[i][j].name == "Rhino":
                 print(4, end=' ')
+            elif Grid[i][j].name == "Leopard":
+                print(5, end=' ')
+            elif Grid[i][j].name == "Mouse":
+                print(6, end=' ')
+            elif Grid[i][j].name == "Grasshopper":
+                print(7, end=' ')
+            elif Grid[i][j].name == "Skunk":
+                print(8, end=' ')
+
         print()
     print()
 
-Animal_class = [Lion, Impala, Baboon, Rhino, Grass]
+Animal_class = [Lion, Impala, Baboon, Rhino, Grass, Leopard, Mouse, Grasshopper, Skunk]
 
 def init_background():
     for i in range(0, Grid_size):
@@ -127,7 +140,32 @@ def simulate(lists):
         if(len(Animal_lists[1])==0):
             print("No Impala")
             return cnt
+        if (len(Animal_lists[2]) == 0):
+            print("No Baboon")
+            return cnt
+        if (len(Animal_lists[3]) == 0):
+            print("No Rhino")
+            return cnt
+        if (len(Animal_lists[4]) == 0):
+            print("No Grass")
+            return cnt
+        if (len(Animal_lists[5]) == 0):
+            print("No Leopard")
+            return cnt
+        if (len(Animal_lists[6]) == 0):
+            print("No Mouse")
+            return cnt
+        if (len(Animal_lists[7]) == 0):
+            print("No Grasshopper")
+            return cnt
+        if (len(Animal_lists[8]) == 0):
+            print("No Skunk")
+            return cnt
+
+            #나중에 for문으로 고쳐!
     return cnt
 
-input = [5, 200, 0, 0, 1000]
+input = [5, 200, 5, 5, 1000, 5, 5, 5, 5 ]
+#[Lion, Impala, Baboon, Rhino, Grass, Leopard, Mouse, Grasshopper, Skunk]
+
 print(simulate(input))
