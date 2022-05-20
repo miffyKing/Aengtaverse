@@ -1,11 +1,11 @@
 import random
-from animal import Animals, Grid_size, Grid_Grass, Grid, Animal, Site_list_random, Site_list_ordered
+from animal import Animals, Grid_size, Grid_Grass, Grid, Animal, Site_list_random, Site_list_ordered, next_dir
 
 
 class Impala(Animals):
     max_life = 600
     min_life = 400
-    site = 4
+    site = 3
     birth_rate = 0.6
     hunting_rate = 1
     predator = ["Lion"]
@@ -119,11 +119,43 @@ class Impala(Animals):
                                 min_dirx = next_x
                                 min_diry = next_y
                                 what_to_eat = temp
-                if min_distance != self.site + 1:  # 발견한 경우, eat하고 move한다
-                    Animal[what_to_eat].remove(Grid_Grass[next_x][next_y])
-                    self.eat_food(next_x, next_y)
-                    # print("Removed Grid Grass")
-                    self.move(min_dirx - self.x, min_diry - self.y)
+                if min_distance != self.site + 1:  # 발견한 경우,
+                    # 해당 방향으로 move한다
+                    if min_distance == 1:
+                        # eat하고 move한다.
+                        Animal[what_to_eat].remove(Grid_Grass[next_x][next_y])
+                        self.eat_food(next_x, next_y)
+                        self.move(min_dirx - self.x, min_diry - self.y)
+                    else:
+                        # move만 한다. (아직 충분히 가까이 있지 않음)
+                        vec_x = min_dirx - self.x
+                        vec_y = min_diry - self.y
+                        x_sign = 0;
+                        y_sign = 0
+                        if (vec_x < 0):
+                            x_sign = -1
+                        elif (vec_x > 0):
+                            x_sign = 1
+
+                        if (vec_y < 0):
+                            y_sign = -1
+                        elif (vec_y > 0):
+                            y_sign = 1
+
+                        for a in range(1, int(self.site / 2) + 1):
+                            t = random.randint(0, len(Site_list_ordered[a]) - 1)
+                            for b in range(0, len(Site_list_ordered[a])):
+                                # 비어있음을 검사
+                                temp_x = self.x + x_sign * Site_list_ordered[a][t - b][0]
+                                temp_y = self.y + y_sign * Site_list_ordered[a][t - b][1]
+                                if (temp_x >= Grid_size or temp_y >= Grid_size):
+                                    temp_x = temp_x % Grid_size
+                                    temp_y = temp_y % Grid_size
+                                if (Grid[temp_x][temp_y] == 0):
+                                    self.move(temp_x - self.x, temp_y - self.y)
+                                    return
+                        # 포식자 검사에는 성공했지만, 도망가는 방향에 빈자리가 하나도 없어서 제자리에 정지
+                        self.move(0, 0)
                     return
 
         # 포식자도 없고, 먹이 못 찾았을 경우
@@ -146,4 +178,3 @@ class Impala(Animals):
 
     def use_turn(self):  # 결국 매 틱 실행되는 함수
         self.check_site()
-

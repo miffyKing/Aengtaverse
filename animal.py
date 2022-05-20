@@ -24,13 +24,23 @@ Animal_Name = ["Lion", "Impala", "Baboon", "Rhino",
                "Skunk"]
 # 종들의 리스트들을 모아놓은 리스트
 Animal_lists = [Lion_list, Impala_list, Baboon_list,
-                Rhino_list, Grass_list, Leopard_list,
-                Mouse_list, Grasshopper_list, Skunk_list]
-
+                Rhino_list, Leopard_list, Mouse_list,
+                Grasshopper_list, Skunk_list, Grass_list]
 # 시야 내의 검색을 위한 list 2개
 # 내 주위를 랜덤하게 검색
 Site_list_random = [ [0]  for i in range(0, 7)] # 최대 5까지 했는데, 동물들의 site를 구해서 다시 최대값을 바꿀 필요가 있을수도
 Site_list_ordered = [ [0]  for i in range(0, 7)] # 부호마다 사분면을 검색하기 위해 사용되는 리스트
+
+# 방향 지정을 위한 함수
+def next_dir(x):
+    if x > 0:
+        x = 1
+    elif x < 0:
+        x = -1
+    else:
+        x = 0
+    return x
+
 
 # 위의 리스트의 값을 초기화
 def make_Site_list_random(k):
@@ -135,13 +145,14 @@ class Animals:
                                 # next_x, y가 포식자의 위치
                                 # self.move(self.x - next_x, self.y - next_y, 2)
                                 # 검사할 사분면의 결정
+                                x_sign = 0; y_sign = 0
                                 if (self.x - next_x < 0):
                                     x_sign = -1
-                                else:
+                                elif (self.x - next_x > 0):
                                     x_sign = 1
-                                if (self.y - next_y < 0):  #
+                                if (self.y - next_y < 0):
                                     y_sign = -1
-                                else:
+                                elif (self.y - next_y > 0):
                                     y_sign = 1
 
                                 for a in range(1, int(self.site/2) + 1):
@@ -181,11 +192,43 @@ class Animals:
                             min_dirx = next_x
                             min_diry = next_y
                             what_to_eat = temp
-                if min_distance != self.site + 1:  # 발견한 경우, eat하고 move한다
-                    Animal[what_to_eat].remove(Grid[next_x][next_y])
-                    self.eat_food(next_x, next_y)
-                    self.move(min_dirx - self.x, min_diry - self.y)
-                    return
+                if min_distance != self.site + 1:  # 발견한 경우,
+                    #해당 방향으로 move한다
+                    if min_distance == 1:
+                        # eat하고 move한다.
+                        Animal[what_to_eat].remove(Grid[next_x][next_y])
+                        self.eat_food(next_x, next_y)
+                        self.move(min_dirx - self.x, min_diry - self.y)
+                    else:
+                        #move만 한다. (아직 충분히 가까이 있지 않음)
+                        vec_x = min_dirx - self.x
+                        vec_y = min_diry - self.y
+                        x_sign = 0; y_sign = 0
+                        if (vec_x < 0):
+                            x_sign = -1
+                        elif (vec_x > 0):
+                            x_sign = 1
+
+                        if (vec_y < 0):
+                            y_sign = -1
+                        elif (vec_y > 0):
+                            y_sign = 1
+
+                        for a in range(1, int(self.site / 2) + 1):
+                            t = random.randint(0, len(Site_list_ordered[a]) - 1)
+                            for b in range(0, len(Site_list_ordered[a])):
+                                # 비어있음을 검사
+                                temp_x = self.x + x_sign * Site_list_ordered[a][t - b][0]
+                                temp_y = self.y + y_sign * Site_list_ordered[a][t - b][1]
+                                if (temp_x >= Grid_size or temp_y >= Grid_size):
+                                    temp_x = temp_x % Grid_size
+                                    temp_y = temp_y % Grid_size
+                                if (Grid[temp_x][temp_y] == 0):
+                                    self.move(temp_x - self.x, temp_y - self.y)
+                                    return
+                        # 먹이 검사에는 성공했지만, 먹이로 가는 방향에 빈자리가 하나도 없어서 제자리에 정지
+                        self.move(0, 0)
+                        return
 
         # 포식자도 없고, 먹이 못 찾았을 경우
         for i in range(1, self.site + 1):

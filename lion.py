@@ -5,13 +5,13 @@ class Lion(Animals):
 
     max_life = 300
     min_life = 200
-    site = 3
-    birth_rate = 0.1
-    hunting_rate = 0.7
+    site = 5
+    birth_rate = 0.2
+    hunting_rate = 0.8
     predator = []
     food = ["Impala", "Rhino"]
-    calorie_waste_rate = 10
-    max_calorie = 200
+    calorie_waste_rate = 7
+    max_calorie = 1000
 
     name = "Lion"
 

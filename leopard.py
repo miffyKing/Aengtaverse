@@ -5,13 +5,13 @@ class Leopard(Animals):
 
     max_life = 250
     min_life = 150
-    site = 3
-    birth_rate = 0.1
-    hunting_rate = 0.7
+    site = 5
+    birth_rate = 0.2
+    hunting_rate = 0.8
     predator = []
     food = ["Impala", "Baboon", "Skunk"]
-    calorie_waste_rate = 10
-    max_calorie = 200
+    calorie_waste_rate = 7
+    max_calorie = 1000
 
     name = "Leopard"
 
@@ -34,7 +34,7 @@ class Leopard(Animals):
                 if (child_y >= Grid_size):
                     child_y -= Grid_size
                 if (Grid[child_x][child_y] == 0):
-                    a = Lion(child_x, child_y, self.energy_left / 2)
+                    a =Leopard(child_x, child_y, self.energy_left / 2)
                     Animal[self.name].append(a)
                     self.energy_left /= 2
                     return

@@ -37,7 +37,7 @@ class Skunk(Animals):
                 if (child_y >= Grid_size):
                     child_y -= Grid_size
                 if (Grid[child_x][child_y] == 0):
-                    a = Baboon(child_x, child_y, self.energy_left / 2)
+                    a = Skunk(child_x, child_y, self.energy_left / 2)
                     Animal[self.name].append(a)
                     self.energy_left /= 2
                     return

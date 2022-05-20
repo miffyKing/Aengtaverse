@@ -8,8 +8,8 @@ class Baboon(Animals):
     max_life = 200
     min_life = 150
     site = 5
-    birth_rate = 0.3
-    hunting_rate = 1
+    birth_rate = 0.4
+    hunting_rate = 0.7
     predator = ["Leopard"]
     food = ["Mouse"]
     calorie_waste_rate = 4

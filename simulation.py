@@ -37,7 +37,7 @@ def print_Grid(cnt):
         print()
     print()
 
-Animal_class = [Lion, Impala, Baboon, Rhino, Grass, Leopard, Mouse, Grasshopper, Skunk]
+Animal_class = [Lion, Impala, Baboon, Rhino, Leopard, Mouse, Grasshopper, Skunk,Grass]
 
 def init_background():
     for i in range(0, Grid_size):
@@ -165,7 +165,7 @@ def simulate(lists):
             #나중에 for문으로 고쳐!
     return cnt
 
-input = [5, 200, 5, 5, 1000, 5, 5, 5, 5 ]
-#[Lion, Impala, Baboon, Rhino, Grass, Leopard, Mouse, Grasshopper, Skunk]
+input = [50, 200, 80, 80, 80, 80, 80, 80, 1000 ]
+#[Lion, Impala, Baboon, Rhino,  Leopard, Mouse, Grasshopper, Skunk,Grass,]
 
 print(simulate(input))
