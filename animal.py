@@ -1,6 +1,6 @@
 import random
 
-Grid_size = 20
+Grid_size = 100
 Grid = [[0] * Grid_size for i in range(Grid_size)]
 Grid_Grass = [[0] * Grid_size for i in range(Grid_size)]
 # 종의 Object들이 들어갈 리스트

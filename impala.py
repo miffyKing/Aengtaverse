@@ -5,13 +5,13 @@ from animal import Animals, Grid_size, Grid_Grass, Grid, Animal, Site_list_rando
 class Impala(Animals):
     max_life = 600
     min_life = 400
-    site = 6
-    birth_rate = 0.3
+    site = 4
+    birth_rate = 0.6
     hunting_rate = 1
     predator = ["Lion"]
     food = ["Grass"]
     calorie = 400
-    calorie_waste_rate = 1
+    calorie_waste_rate = 0 # 초식동물의 경우, 칼로리 소모를 없애고, 번식하는 경우를 제한했다.
     max_calorie = 1000
 
     name = "Impala"
@@ -48,6 +48,8 @@ class Impala(Animals):
         if(self.energy_left > self.max_calorie) :
             self.energy_left = self.max_calorie
         Grid_Grass[x][y] = 0
+        if (1 - self.birth_rate) < random.random():
+            self.make_child()
 
     def check_site(self):  # 틱에서 결국 실행되는 함수
         # 포식자 검색 & 먹이 검색
@@ -69,7 +71,6 @@ class Impala(Animals):
                         if Grid[next_x][next_y] != 0 and Grid[next_x][next_y].name == temp:
                             if Grid[next_x][next_y].hunting_rate > random.random():  # 포식자 감지 성공
                                 # next_x, y가 포식자의 위치
-                                # self.move(self.x - next_x, self.y - next_y, 2)
                                 # 검사할 사분면의 결정
                                 if (self.x - next_x < 0):
                                     x_sign = -1
@@ -80,7 +81,7 @@ class Impala(Animals):
                                 else:
                                     y_sign = 1
 
-                                for a in range(1, int(self.site / 2) + 1):
+                                for a in range(int(self.site / 2) + 1, 1, -1):
                                     t = random.randint(0, len(Site_list_ordered[a]) - 1)
                                     for b in range(0, len(Site_list_ordered[a])):
                                         # 비어있음을 검사
@@ -144,8 +145,5 @@ class Impala(Animals):
 
 
     def use_turn(self):  # 결국 매 틱 실행되는 함수
-        if self.energy_left >= self.max_calorie * self.threshold_birth:
-            if (1 - self.birth_rate) < random.random():
-                self.make_child()
         self.check_site()
 

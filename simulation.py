@@ -51,7 +51,10 @@ def gen_species(idx, num):
             if Grid[i][j] == 0:
                 Grid_tmp.append(tmp)
 
+    length_Grid_left = len(Grid_tmp)
     for i in range(0, num):
+        if(length_Grid_left == 0):
+            break
         rand = random.randint(0, len(Grid_tmp) - 1)
         x = Grid_tmp[rand][0]
         y = Grid_tmp[rand][1]
@@ -59,6 +62,7 @@ def gen_species(idx, num):
         Animal_lists[idx].append(a)
         Grid[x][y] = a
         del Grid_tmp[rand]
+        length_Grid_left -= 1
 
 def gen_grass(idx, num):
     Grid_tmp = []
@@ -68,7 +72,11 @@ def gen_grass(idx, num):
             if Grid_Grass[i][j] == 0:
                 Grid_tmp.append(tmp)
 
+    length_Grid_left = len(Grid_tmp)
+
     for i in range(0, num):
+        if (length_Grid_left == 0):
+            break
         rand = random.randint(0, len(Grid_tmp) - 1)
         x = Grid_tmp[rand][0]
         y = Grid_tmp[rand][1]
@@ -76,6 +84,7 @@ def gen_grass(idx, num):
         Animal_lists[idx].append(a)
         Grid_Grass[x][y] = a
         del Grid_tmp[rand]
+        length_Grid_left -= 1
 
 def gen_animals(lists):
     # lists 내부의 숫자만큼 각 종을 생성
@@ -91,7 +100,6 @@ def simulate(lists):
     cnt = 0
     length = len(lists)
     while(cnt < 1000):
-        #print_Grid(cnt)
         print(cnt, end=" ")
         cnt+=1
         # Problem is removing lion during the iteration
@@ -109,12 +117,17 @@ def simulate(lists):
                 if (tmp == 0):
                     break
             print(len(list_of_animal), end=" ")
-
         # make grass
-        gen_grass(length -1, 1)
+        gen_grass(length -1, 10)
         print(len(Animal_lists[length-1]), end=" ")
-
         print()
+        if(len(Animal_lists[0]) == 0):
+            print("No Lions");
+            return cnt
+        if(len(Animal_lists[1])==0):
+            print("No Impala")
+            return cnt
+    return cnt
 
-input = [0, 10, 0, 0, 350]
-simulate(input)
+input = [5, 200, 0, 0, 1000]
+print(simulate(input))
