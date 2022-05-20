@@ -9,6 +9,7 @@ from leopard import Leopard
 from mouse import Mouse
 from grasshopper import Grasshopper
 from skunk import Skunk
+from snake import Snake
 
 cnt = 0
 def print_Grid(cnt):
@@ -33,11 +34,13 @@ def print_Grid(cnt):
                 print(7, end=' ')
             elif Grid[i][j].name == "Skunk":
                 print(8, end=' ')
+            elif Grid[i][j].name == "Snake":
+                print(9, end=' ')
 
         print()
     print()
 
-Animal_class = [Lion, Impala, Baboon, Rhino, Leopard, Mouse, Grasshopper, Skunk,Grass]
+Animal_class = [Lion, Impala, Baboon, Rhino, Leopard, Mouse, Grasshopper, Skunk, Snake, Grass]
 
 def init_background():
     for i in range(0, Grid_size):
@@ -161,11 +164,14 @@ def simulate(lists):
         if (len(Animal_lists[8]) == 0):
             print("No Skunk")
             return cnt
+        if (len(Animal_lists[9]) == 0):
+            print("No Snake")
+            return cnt
 
             #나중에 for문으로 고쳐!
     return cnt
 
-input = [50, 200, 80, 80, 80, 80, 80, 80, 1000 ]
-#[Lion, Impala, Baboon, Rhino,  Leopard, Mouse, Grasshopper, Skunk,Grass,]
+input = [50, 200, 80, 80, 80, 80, 80, 80, 80, 1000 ]
+#[Lion, Impala, Baboon, Rhino,  Leopard, Mouse, Grasshopper, Skunk,Snake, Grass,]
 
 print(simulate(input))

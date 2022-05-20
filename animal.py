@@ -13,19 +13,21 @@ Leopard_list = []
 Mouse_list = []
 Grasshopper_list = []
 Skunk_list = []
+Snake_list = []
 
 # 이름을 통해 리스트에 접근할 수 있도록 해주는 딕셔너리, 새로운 종의 추가마다 추가 필요
 Animal = {"Lion" : Lion_list, "Impala" : Impala_list, "Baboon" : Baboon_list,
           "Rhino" : Rhino_list, "Grass" : Grass_list, "Leopard" : Leopard_list,
-          "Mouse" : Mouse_list, "Grasshopper": Grasshopper_list, "Skunk": Skunk_list}
+          "Mouse" : Mouse_list, "Grasshopper": Grasshopper_list, "Skunk": Skunk_list,
+          "Snake" : Snake_list}
 # 종의 이름들을 담고 있는 리스트
 Animal_Name = ["Lion", "Impala", "Baboon", "Rhino",
                "Grass", "Leopard", "Mouse", "Grasshopper",
-               "Skunk"]
+               "Skunk", "Snake"]
 # 종들의 리스트들을 모아놓은 리스트
 Animal_lists = [Lion_list, Impala_list, Baboon_list,
                 Rhino_list, Leopard_list, Mouse_list,
-                Grasshopper_list, Skunk_list, Grass_list]
+                Grasshopper_list, Skunk_list, Snake_list, Grass_list]
 # 시야 내의 검색을 위한 list 2개
 # 내 주위를 랜덤하게 검색
 Site_list_random = [ [0]  for i in range(0, 7)] # 최대 5까지 했는데, 동물들의 site를 구해서 다시 최대값을 바꿀 필요가 있을수도
